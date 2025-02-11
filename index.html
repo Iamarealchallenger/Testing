@@ -8,7 +8,10 @@
         body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; }
         .container { width: 90%; max-width: 1200px; margin: auto; padding: 20px; background: white; }
         .section { padding: 40px 20px; text-align: center; }
-        .button { display: inline-block; padding: 15px 30px; margin: 10px; background: #ff6600; color: white; text-decoration: none; border-radius: 5px; }
+        .button { display: inline-block; padding: 15px 30px; margin: 10px; background: #ff6600; color: white; text-decoration: none; border-radius: 5px; cursor: pointer; }
+        #contactForm { display: none; margin-top: 20px; }
+        #contactForm input { display: block; width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px; }
+        #contactForm button { background: #ff6600; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -16,57 +19,74 @@
         <div class="section">
             <h1>Brokerlikni atigi 6 haftada oʻrganib, oyiga 1000$ + daromadga chiqing</h1>
             <p>Oʻzbekistonning N°1 brokeri Kamol Niyazov akademiyasining kursida 1-lotingizni yuting va 2024-yilda yuqori daromad qilib, maqsadlaringizga erishing.</p>
-            <a href="#" class="button">Serdaromad kasbni oʻrganish</a>
+            <button class="button" onclick="showForm()">Serdaromad kasbni oʻrganish</button>
         </div>
         <div class="section" style="background:#eee;">
             <h2>Muammolar</h2>
             <p>— Hozirgi kasbingizdan qoniqmaysizmi?</p>
             <p>— Ota-onangizdan pul so‘rashdan charchadingizmi?</p>
             <p>— Yaxshi daromad topishni xohlaysizmi?</p>
-            <a href="#" class="button">Ha, ularni hoziroq hal qilmoqchiman!</a>
+            <button class="button" onclick="showForm()">Ha, ularni hoziroq hal qilmoqchiman!</button>
         </div>
         <div class="section">
             <h2>Brokerlik nima uchun foydali?</h2>
             <p>— Raqobat kam, talab esa yuqori</p>
             <p>— Kuniga 3-4 soat ishlash bilan 1000$+ daromad</p>
-            <a href="#" class="button">Brokerlikni oʻrganish</a>
+            <button class="button" onclick="showForm()">Brokerlikni oʻrganish</button>
         </div>
-    </div>
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Форма контактов</title>
-</head>
-<body>
 
-    <h1>Оставьте свои контакты</h1>
+        <!-- Форма для контактов -->
+        <div id="contactForm">
+            <h2>Оставьте свои контакты</h2>
+            <form id="form">
+                <label for="name">Имя:</label>
+                <input type="text" id="name" name="name" required>
 
-    <button onclick="showForm()">Оставить контакты</button>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
 
-    <div id="contactForm" style="display: none;">
-        <form id="form">
-            <label for="name">Имя:</label>
-            <input type="text" id="name" name="name" required>
+                <label for="phone">Телефон:</label>
+                <input type="tel" id="phone" name="phone" required>
 
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-
-            <button type="submit">Отправить</button>
-        </form>
+                <button type="submit">Отправить</button>
+            </form>
+        </div>
     </div>
 
     <script>
+        // Показать форму при нажатии на кнопку
         function showForm() {
-            document.getElementById("contactForm").style.display = "block";
+            document.getElementById('contactForm').style.display = 'block';
         }
 
-        document.getElementById("form").addEventListener("submit", function(event) {
-            event.preventDefault();
-            alert("Контакты отправлены!");
+        // Обработка отправки формы
+        document.getElementById('form').addEventListener('submit', function(event) {
+            event.preventDefault(); // Предотвращаем стандартное поведение формы
+
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value
+            };
+
+            // Отправляем данные на сервер (замените URL на ваш)
+            fetch('https://your-server-url.com/submit-contact', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Спасибо! Ваши контакты успешно отправлены.');
+                document.getElementById('contactForm').style.display = 'none'; // Скрываем форму после отправки
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Произошла ошибка при отправке данных.');
+            });
         });
     </script>
-    
 </body>
 </html>
